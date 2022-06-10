@@ -1,11 +1,12 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
-class CustomPermission(BasePermission):
+class AuthorOrReadOnlyPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
-        if request.method not in SAFE_METHODS:
-            return obj.author == request.user
-        return True
+        return (
+            request.method in SAFE_METHODS
+            or obj.author == request.user
+        )
 
     def has_permission(self, request, view):
         return request.user.is_authenticated

@@ -7,7 +7,7 @@ from .views import (PostViewSet, CommentViewSet, GroupView, GroupDetailView)
 
 router_v1 = SimpleRouter()
 router_v1.register('posts', PostViewSet, basename='posts')
-router_v1.register(r'posts/(?P<post_id>[^/.]+)/comments',
+router_v1.register(r'posts/(?P<post_id>\d+)/comments',
                    CommentViewSet,
                    basename='comment'
                    )
@@ -15,6 +15,6 @@ router_v1.register(r'posts/(?P<post_id>[^/.]+)/comments',
 urlpatterns = [
     path('v1/api-token-auth/', views.obtain_auth_token),
     path('v1/', include(router_v1.urls)),
-    path('v1/groups/', GroupView.as_view()),
+    path('v1/groups/', GroupView.as_view({'get': 'list'})),
     path('v1/groups/<int:pk>/', GroupDetailView.as_view())
 ]
